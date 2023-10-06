@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
+import 'package:routime_app/app/core/widgets/routime_field.dart';
 import 'package:routime_app/app/core/widgets/routime_logo.dart';
 
 class LoginPage extends StatelessWidget {
@@ -31,9 +30,14 @@ class LoginPage extends StatelessWidget {
                       child: Form(
                         child: Column(
                           children: [
-                            TextFormField(),
+                            RoutimeField(
+                              label: 'E-mail',
+                            ),
                             const SizedBox(height: 20),
-                            TextFormField(),
+                            RoutimeField(
+                              label: 'Senha',
+                              obscureText: true,
+                            ),
                             const SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () {},
