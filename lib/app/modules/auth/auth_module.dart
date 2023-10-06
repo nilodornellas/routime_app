@@ -12,7 +12,8 @@ class AuthModule extends RoutimeModule {
             create: (_) => LoginController(),
           ),
           ChangeNotifierProvider(
-            create: (_) => RegisterController(),
+            create: (context) =>
+                RegisterController(userService: context.read()),
           ),
         ], routers: {
           '/login': (context) => const LoginPage(),
