@@ -11,27 +11,30 @@ class RoutimeListenerNotifier {
   void listener({
     required BuildContext context,
     required SuccessVoidCallback successCallback,
+    EverCallback? everCallback,
     ErrorCallback? errorCallback,
   }) {
-    changeNotifier.addListener(
-      () {
-        if (changeNotifier.loading) {
-          Loader.show(context);
-        } else {
-          Loader.hide();
-        }
+    changeNotifier.addListener(() {
+      if (everCallback != null) {
+        everCallback(changeNotifier, this);
+      }
 
-        if (changeNotifier.hasError) {
-          if (errorCallback != null) {
-            errorCallback(changeNotifier, this);
-          }
-          Messages.of(context)
-              .showError(changeNotifier.error ?? 'Erro na operação');
-        } else if (changeNotifier.isSuccess) {
-          successCallback(changeNotifier, this);
+      if (changeNotifier.loading) {
+        Loader.show(context);
+      } else {
+        Loader.hide();
+      }
+
+      if (changeNotifier.hasError) {
+        if (errorCallback != null) {
+          errorCallback(changeNotifier, this);
         }
-      },
-    );
+        Messages.of(context)
+            .showError(changeNotifier.error ?? 'Erro na operação');
+      } else if (changeNotifier.isSuccess) {
+        successCallback(changeNotifier, this);
+      }
+    });
   }
 
   void dispose() {
@@ -43,4 +46,6 @@ typedef SuccessVoidCallback = void Function(
     RoutimeChangeNotifier notifier, RoutimeListenerNotifier listnerInstance);
 
 typedef ErrorCallback = void Function(
+    RoutimeChangeNotifier notifier, RoutimeListenerNotifier listnerInstance);
+typedef EverCallback = void Function(
     RoutimeChangeNotifier notifier, RoutimeListenerNotifier listnerInstance);

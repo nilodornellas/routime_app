@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +51,23 @@ class UserRepositoryImpl implements UserRepository {
         throw AuthException(message: 'Login ou senha inválidos');
       }
       throw AuthException(message: e.message ?? 'Erro ao realizar login');
+    }
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    try {
+      // final loginMethods =
+      //     await _firebaseAuth.fetchSignInMethodsForEmail(email);
+
+      // if (loginMethods.contains('password')) {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      // } else {
+      // throw AuthException(message: 'E-mail não cadastrado');
+      // }
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+      throw AuthException(message: 'Erro ao resetar a senha');
     }
   }
 }

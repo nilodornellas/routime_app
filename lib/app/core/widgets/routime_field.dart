@@ -9,15 +9,17 @@ class RoutimeField extends StatelessWidget {
   final ValueNotifier<bool> obscureTextVN;
   final TextEditingController? controller;
   final FormFieldValidator<String>? validator;
+  final FocusNode? focusNode;
 
-  RoutimeField(
-      {super.key,
-      required this.label,
-      this.suffixIconButton,
-      this.obscureText = false,
-      this.controller,
-      this.validator})
-      : assert(obscureText == true ? suffixIconButton == null : true,
+  RoutimeField({
+    super.key,
+    required this.label,
+    this.suffixIconButton,
+    this.obscureText = false,
+    this.controller,
+    this.validator,
+    this.focusNode,
+  })  : assert(obscureText == true ? suffixIconButton == null : true,
             'ObscureText não pode ser enviado em conjunto com o suffixIconButton'),
         obscureTextVN = ValueNotifier(obscureText);
 
@@ -29,6 +31,7 @@ class RoutimeField extends StatelessWidget {
         return TextFormField(
           controller: controller,
           validator: validator,
+          focusNode: focusNode,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),

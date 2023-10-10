@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:routime_app/app/core/notifier/routime_listener_notifier.dart';
+import 'package:routime_app/app/core/ui/messages.dart';
 import 'package:routime_app/app/core/widgets/routime_field.dart';
 import 'package:routime_app/app/core/widgets/routime_logo.dart';
 import 'package:routime_app/app/modules/auth/login/login_controller.dart';
@@ -17,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formlKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
+  final _emailFocus = FocusNode();
 
   @override
   void initState() {
@@ -24,6 +26,13 @@ class _LoginPageState extends State<LoginPage> {
     RoutimeListenerNotifier(changeNotifier: context.read<LoginController>())
         .listener(
       context: context,
+      everCallback: (notifier, listnerInstance) {
+        if (notifier is LoginController) {
+          if (notifier.hasInfo) {
+            Messages.of(context).showInfo(notifier.infoMessage!);
+          }
+        }
+      },
       successCallback: (notifier, listnerInstance) {},
     );
   }
@@ -56,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             RoutimeField(
                               label: 'E-mail',
+                              focusNode: _emailFocus,
                               controller: _emailEC,
                               validator: Validatorless.multiple([
                                 Validatorless.required('E-mail obrigatório'),
@@ -95,7 +105,18 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                if (_emailEC.text.isNotEmpty) {
+                                  context
+                                      .read<LoginController>()
+                                      .forgotPassword(_emailEC.text);
+                                } else {
+                                  _emailFocus.requestFocus();
+                                  Messages.of(context).showError(
+                                    'Digite um e-mail para recuperar a senha',
+                                  );
+                                }
+                              },
                               child: const Text('Esqueceu a senha?'),
                             ),
                             const SizedBox(height: 40),
