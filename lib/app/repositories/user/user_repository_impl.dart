@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:routime_app/app/core/exceptions/auth_exceptions.dart';
 
 import 'package:routime_app/app/repositories/user/user_repositoy.dart';
@@ -28,6 +29,26 @@ class UserRepositoryImpl implements UserRepository {
       } else {
         throw AuthException(message: e.message ?? 'Erro ao registrar usuário');
       }
+    }
+  }
+
+  @override
+  Future<User?> login(String email, String password) async {
+    try {
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return userCredential.user;
+    } on PlatformException catch (e, s) {
+      debugPrint('$e');
+      debugPrint('$s');
+      throw AuthException(message: e.message ?? 'Erro ao realizar login');
+    } on FirebaseAuthException catch (e, s) {
+      debugPrint('$e');
+      debugPrint('$s');
+      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+        throw AuthException(message: 'Login ou senha inválidos');
+      }
+      throw AuthException(message: e.message ?? 'Erro ao realizar login');
     }
   }
 }
