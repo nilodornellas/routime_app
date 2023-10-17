@@ -70,4 +70,9 @@ class UserRepositoryImpl implements UserRepository {
       throw AuthException(message: 'Erro ao resetar a senha');
     }
   }
+
+  @override
+  Future<void> logout() async {
+    await _firebaseAuth.signOut();
+  }
 }
