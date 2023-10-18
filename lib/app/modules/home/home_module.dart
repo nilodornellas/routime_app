@@ -4,7 +4,7 @@ import 'package:routime_app/app/modules/home/home_page.dart';
 class HomeModule extends RoutimeModule {
   HomeModule()
       : super(
-          bindings: [],
+          bindings: null,
           routers: {
             '/home': (context) => const HomePage(),
           },

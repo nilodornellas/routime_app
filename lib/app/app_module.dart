@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:routime_app/app/app_widget.dart';
+import 'package:routime_app/app/core/auth/auth_provider.dart';
 import 'package:routime_app/app/repositories/user/user_repository_impl.dart';
 import 'package:routime_app/app/repositories/user/user_repositoy.dart';
 import 'package:routime_app/app/services/user/user_service.dart';
@@ -20,6 +21,12 @@ class AppModule extends StatelessWidget {
         ),
         Provider<UserService>(
           create: (context) => UserServiceImpl(userRepository: context.read()),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => AuthProvider(
+              firebaseAuth: context.read(), userService: context.read())
+            ..loadListener(),
         ),
       ],
       child: const AppWidget(),
