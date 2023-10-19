@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:routime_app/app/core/auth/auth_provider.dart';
-import 'package:routime_app/app/core/ui/messages.dart';
 import 'package:routime_app/app/core/ui/theme_extension.dart';
 import 'package:routime_app/app/services/user/user_service.dart';
 import 'package:validatorless/validatorless.dart';

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:routime_app/app/core/auth/auth_provider.dart';
 import 'package:routime_app/app/modules/home/widgets/home_drawer.dart';
 
 class HomePage extends StatelessWidget {
