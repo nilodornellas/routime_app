@@ -5,4 +5,5 @@ abstract interface class UserService {
   Future<User?> login(String email, String password);
   Future<void> forgotPassword(String email);
   Future<void> logout();
+  Future<void> updateDisplayName(String name);
 }
