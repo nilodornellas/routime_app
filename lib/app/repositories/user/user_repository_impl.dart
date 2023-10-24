@@ -1,25 +1,51 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:routime_app/app/core/exceptions/auth_exceptions.dart';
 
 import 'package:routime_app/app/repositories/user/user_repositoy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final FirebaseAuth _firebaseAuth;
+  final FirebaseStorage _firebaseStorage;
 
   UserRepositoryImpl({
     required FirebaseAuth firebaseAuth,
-  }) : _firebaseAuth = firebaseAuth;
+    required FirebaseStorage firebaseStorage,
+  })  : _firebaseAuth = firebaseAuth,
+        _firebaseStorage = firebaseStorage;
+
+  Future<String> uploadImageToStore(String? childName, Uint8List file) async {
+    Reference ref =
+        _firebaseStorage.ref().child('profileImage').child('$childName');
+    UploadTask uploadTask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String dowloadUrl = await snapshot.ref.getDownloadURL();
+    return dowloadUrl;
+  }
 
   @override
-  Future<User?> register(String email, String password) async {
+  Future<User?> register(
+    Uint8List? filePhoto,
+    String name,
+    String email,
+    String password,
+  ) async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool('enableNavigation', false);
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
+      if (filePhoto != null) {
+        String photoURL =
+            await uploadImageToStore(userCredential.user?.uid, filePhoto);
+        userCredential.user?.updatePhotoURL(photoURL);
+      }
+      userCredential.user?.updateDisplayName(name);
       return userCredential.user;
     } on FirebaseAuthException catch (e, s) {
       debugPrint('$e');
@@ -31,6 +57,8 @@ class UserRepositoryImpl implements UserRepository {
       } else {
         throw AuthException(message: e.message ?? 'Erro ao registrar usuário');
       }
+    } on PlatformException catch (e) {
+      throw AuthException(message: e.message ?? 'Erro ao registrar usuário');
     }
   }
 

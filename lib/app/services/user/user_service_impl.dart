@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:routime_app/app/repositories/user/user_repositoy.dart';
 import 'package:routime_app/app/services/user/user_service.dart';
@@ -8,8 +10,13 @@ class UserServiceImpl implements UserService {
       : _userRepository = userRepository;
 
   @override
-  Future<User?> register(String email, String password) =>
-      _userRepository.register(email, password);
+  Future<User?> register(
+    Uint8List? filePhoto,
+    String name,
+    String email,
+    String password,
+  ) =>
+      _userRepository.register(filePhoto, name, email, password);
 
   @override
   Future<User?> login(String email, String password) =>
