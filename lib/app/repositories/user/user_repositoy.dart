@@ -13,4 +13,5 @@ abstract interface class UserRepository {
   Future<void> forgotPassword(String email);
   Future<void> logout();
   Future<void> updateDisplayName(String name);
+  Future<void> updatePhotoUrl(Uint8List file);
 }

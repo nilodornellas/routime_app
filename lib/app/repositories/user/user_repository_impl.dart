@@ -112,4 +112,14 @@ class UserRepositoryImpl implements UserRepository {
       user.reload();
     }
   }
+
+  @override
+  Future<void> updatePhotoUrl(Uint8List file) async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      final url = await uploadImageToStore(user.uid, file);
+      user.updatePhotoURL(url);
+      user.reload();
+    }
+  }
 }
