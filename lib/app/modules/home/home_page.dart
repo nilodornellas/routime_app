@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:routime_app/app/modules/home/widgets/home_drawer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,7 +9,6 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      drawer: HomeDrawer(),
       body: Container(),
     );
   }
